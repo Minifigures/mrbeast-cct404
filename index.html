@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #1a1a2e;
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .container {
@@ -23,6 +23,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         /* Screen Management */
@@ -30,15 +31,18 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            display: none;
+            display: flex;
             flex-direction: column;
+            visibility: hidden;
             opacity: 0;
-            transition: opacity 0.6s ease;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
         .screen.active {
-            display: flex;
+            visibility: visible;
             opacity: 1;
+            pointer-events: auto;
             z-index: 100;
         }
 
@@ -65,14 +69,8 @@
         }
 
         @keyframes titlePulse {
-            from {
-                transform: scale(0.95);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .subtitle {
@@ -85,14 +83,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .rules-text {
@@ -106,7 +98,7 @@
             animation: slideDown 0.8s ease-out 0.4s backwards;
         }
 
-        /* ===== HEADER BAR (Game Screens) ===== */
+        /* ===== HEADER BAR ===== */
         .header-bar {
             background: linear-gradient(90deg, #0d0d0d 0%, #1a1a2e 100%);
             padding: 20px 40px;
@@ -115,6 +107,7 @@
             align-items: center;
             border-bottom: 3px solid #00C853;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
         }
 
         .round-label {
@@ -169,6 +162,43 @@
             font-weight: 700;
         }
 
+        /* ===== PASS DEVICE SCREEN ===== */
+        .pass-device-screen {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0d0d2e 100%);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .pass-icon {
+            font-size: 120px;
+            margin-bottom: 40px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .pass-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .pass-text {
+            font-size: 22px;
+            color: #b3e5fc;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
         /* ===== BRIEFCASE STYLES ===== */
         .briefcase-container {
             display: flex;
@@ -213,12 +243,8 @@
         }
 
         @keyframes shine {
-            0% {
-                transform: rotate(0deg) translateX(-100%);
-            }
-            100% {
-                transform: rotate(0deg) translateX(100%);
-            }
+            0% { transform: rotate(0deg) translateX(-100%); }
+            100% { transform: rotate(0deg) translateX(100%); }
         }
 
         .briefcase-handle {
@@ -306,14 +332,8 @@
         }
 
         @keyframes scaleIn {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .confirmation-title {
@@ -337,12 +357,8 @@
         }
 
         @keyframes shuffle {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .continue-button {
@@ -373,6 +389,7 @@
             display: flex;
             flex-direction: column;
             padding: 40px;
+            justify-content: center;
         }
 
         .reveal-title {
@@ -387,7 +404,6 @@
             display: flex;
             justify-content: space-around;
             gap: 40px;
-            flex: 1;
             align-items: center;
             margin-bottom: 40px;
         }
@@ -408,6 +424,12 @@
             letter-spacing: 2px;
         }
 
+        .player-result {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
         .card {
             width: 160px;
             height: 200px;
@@ -417,24 +439,13 @@
             align-items: center;
             font-size: 80px;
             font-weight: 900;
-            transition: all 0.5s ease;
             animation: cardReveal 0.8s ease-out forwards;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
         @keyframes cardReveal {
-            from {
-                transform: rotateY(90deg) scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: rotateY(0) scale(1);
-                opacity: 1;
-            }
-        }
-
-        .card:nth-child(2) {
-            animation-delay: 0.3s;
+            from { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+            to { transform: rotateY(0) scale(1); opacity: 1; }
         }
 
         .card.deed {
@@ -464,7 +475,7 @@
         }
 
         .restart-button,
-        .round-two-button {
+        .next-round-button {
             padding: 16px 40px;
             font-size: 18px;
             font-weight: 700;
@@ -487,345 +498,447 @@
             box-shadow: 0 10px 24px rgba(255, 215, 0, 0.4);
         }
 
-        .round-two-button {
+        .next-round-button {
             background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
             color: #000;
         }
 
-        .round-two-button:hover {
+        .next-round-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 24px rgba(255, 255, 255, 0.3);
         }
 
-        .game-over-title {
-            color: #ff5252;
+        /* ===== FINAL SCREEN ===== */
+        .final-screen {
+            background: #1a1a2e;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .trophy {
+            font-size: 140px;
+            margin-bottom: 30px;
+            animation: scaleIn 0.8s ease-out;
+        }
+
+        .final-title {
             font-size: 60px;
-            text-shadow: 0 4px 12px rgba(255, 82, 82, 0.5);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .final-subtitle {
+            font-size: 28px;
+            color: #b3e5fc;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #ffd700;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1200px) {
-            .beast-title {
-                font-size: 80px;
-            }
-
-            .subtitle {
-                font-size: 36px;
-            }
-
-            .rules-text {
-                font-size: 20px;
-            }
-
-            .game-title {
-                font-size: 44px;
-            }
-
-            .briefcase-container {
-                gap: 40px;
-            }
+            .beast-title { font-size: 80px; }
+            .subtitle { font-size: 36px; }
+            .rules-text { font-size: 20px; }
+            .game-title { font-size: 44px; }
+            .briefcase-container { gap: 40px; }
         }
 
         @media (max-width: 768px) {
-            .container {
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .screen {
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .beast-title {
-                font-size: 56px;
-            }
-
-            .game-title {
-                font-size: 36px;
-            }
-
-            .briefcase-container {
-                gap: 20px;
-            }
-
-            .reveal-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .divider {
-                width: 250px;
-                height: 3px;
-                margin: 20px 0;
-            }
+            .container { height: auto; min-height: 100vh; }
+            .screen { height: auto; min-height: 100vh; }
+            .beast-title { font-size: 56px; letter-spacing: 4px; }
+            .subtitle { font-size: 28px; }
+            .game-title { font-size: 32px; }
+            .game-subtitle { font-size: 18px; margin-bottom: 30px; }
+            .briefcase-container { gap: 20px; }
+            .briefcase-card { width: 160px; height: 220px; }
+            .reveal-content { flex-direction: column; gap: 20px; }
+            .divider { width: 250px; height: 3px; margin: 20px 0; }
+            .reveal-title { font-size: 36px; }
+            .final-title { font-size: 40px; }
+            .pass-title { font-size: 36px; }
+            .confirmation-title { font-size: 36px; }
+            .header-bar { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
+            .round-label { font-size: 20px; }
+            .deed-counter { font-size: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- SCREEN 1: Title Screen -->
+        <!-- TITLE SCREEN -->
         <div id="titleScreen" class="screen active">
             <div class="title-content">
                 <div class="beast-title">BEAST GAMES</div>
                 <div class="subtitle">THE BRIEFCASE CHALLENGE</div>
                 <div class="rules-text">
-                    Two players. Two briefcases. One deed to a private island.<br>
-                    Hide your deed. Pick your opponent's briefcase. Get both deeds to win.
+                    Two players. Two briefcases. Each round, one player hides the deed, the other picks.<br>
+                    Round 1: Player 1 hides, Player 2 picks.<br>
+                    Round 2: Roles swap. First to 2 deeds wins the island.
                 </div>
-                <button class="briefcase-button" onclick="startChallenge()" style="font-size: 24px; padding: 20px 50px;">START CHALLENGE</button>
+                <button class="briefcase-button" onclick="startGame()" style="font-size: 24px; padding: 20px 50px;">START CHALLENGE</button>
             </div>
         </div>
 
-        <!-- SCREEN 2: Player 1 Hide Deed -->
-        <div id="player1HideScreen" class="screen">
+        <!-- HIDE DEED SCREEN -->
+        <div id="hideScreen" class="screen">
             <div class="header-bar">
-                <div class="round-label">ROUND <span id="round1Label">1</span></div>
-                <div class="deed-counter">PLAYER 1: <span id="p1DeedCount">0</span> Deeds | PLAYER 2: <span id="p2DeedCount">0</span> Deeds</div>
+                <div class="round-label">ROUND <span id="hideRoundLabel">1</span></div>
+                <div class="deed-counter">P1: <span id="hideP1Score">0</span> | P2: <span id="hideP2Score">0</span></div>
             </div>
             <div class="game-screen">
-                <div class="game-title">PLAYER 1: HIDE YOUR DEED</div>
+                <div class="game-title" id="hideTitle">PLAYER 1: HIDE YOUR DEED</div>
                 <div class="game-subtitle">Place your signed deed in one briefcase and an X in the other. Your opponent cannot see your choice.</div>
                 <div class="briefcase-container">
-                    <div class="briefcase-card" onclick="player1HideDeed('A')">
+                    <div class="briefcase-card" onclick="hideDeed('A')">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">A</div>
-                        <button class="briefcase-button">Choose A</button>
+                        <button class="briefcase-button" onclick="event.stopPropagation(); hideDeed('A')">Choose A</button>
                     </div>
-                    <div class="briefcase-card" onclick="player1HideDeed('B')">
+                    <div class="briefcase-card" onclick="hideDeed('B')">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">B</div>
-                        <button class="briefcase-button">Choose B</button>
+                        <button class="briefcase-button" onclick="event.stopPropagation(); hideDeed('B')">Choose B</button>
                     </div>
                 </div>
                 <div class="instruction-text">TAP A BRIEFCASE TO PLACE YOUR DEED INSIDE</div>
             </div>
         </div>
 
-        <!-- SCREEN 3: Confirmation -->
-        <div id="confirmationScreen" class="screen">
+        <!-- CONFIRMATION SCREEN -->
+        <div id="confirmScreen" class="screen">
             <div class="header-bar">
-                <div class="round-label">ROUND <span id="round2Label">1</span></div>
-                <div class="deed-counter">PLAYER 1: <span id="p1DeedCount2">0</span> Deeds | PLAYER 2: <span id="p2DeedCount2">0</span> Deeds</div>
+                <div class="round-label">ROUND <span id="confirmRoundLabel">1</span></div>
+                <div class="deed-counter">P1: <span id="confirmP1Score">0</span> | P2: <span id="confirmP2Score">0</span></div>
             </div>
             <div class="confirmation-screen">
-                <div class="checkmark-circle">✓</div>
-                <div class="confirmation-title" id="confirmTitle">DEED HIDDEN IN BRIEFCASE A</div>
+                <div class="checkmark-circle">&#10003;</div>
+                <div class="confirmation-title" id="confirmTitle">DEED HIDDEN</div>
                 <div class="confirmation-text">An X has been placed in the other briefcase. Both briefcases are now closed and shuffled.</div>
-                <div class="shuffle-animation">A ⇄ B</div>
-                <button class="continue-button" onclick="goToPlayer2Pick()">CONTINUE</button>
+                <div class="shuffle-animation">A &#8644; B</div>
+                <button class="continue-button" onclick="goToPassDevice()">CONTINUE</button>
             </div>
         </div>
 
-        <!-- SCREEN 4: Player 2 Pick -->
-        <div id="player2PickScreen" class="screen">
+        <!-- PASS DEVICE SCREEN -->
+        <div id="passScreen" class="screen">
             <div class="header-bar">
-                <div class="round-label">ROUND <span id="round3Label">1</span></div>
-                <div class="deed-counter">PLAYER 1: <span id="p1DeedCount3">0</span> Deeds | PLAYER 2: <span id="p2DeedCount3">0</span> Deeds</div>
+                <div class="round-label">ROUND <span id="passRoundLabel">1</span></div>
+                <div class="deed-counter">P1: <span id="passP1Score">0</span> | P2: <span id="passP2Score">0</span></div>
+            </div>
+            <div class="pass-device-screen">
+                <div class="pass-icon">&#128241;</div>
+                <div class="pass-title" id="passTitle">PASS THE DEVICE</div>
+                <div class="pass-text" id="passText">Hand the device to Player 2. They will now pick a briefcase.</div>
+                <button class="continue-button" onclick="goToPick()">READY</button>
+            </div>
+        </div>
+
+        <!-- PICK BRIEFCASE SCREEN -->
+        <div id="pickScreen" class="screen">
+            <div class="header-bar">
+                <div class="round-label">ROUND <span id="pickRoundLabel">1</span></div>
+                <div class="deed-counter">P1: <span id="pickP1Score">0</span> | P2: <span id="pickP2Score">0</span></div>
             </div>
             <div class="game-screen">
-                <div class="game-title">PLAYER 2: PICK A BRIEFCASE</div>
-                <div class="game-subtitle">Choose to steal your opponent's briefcase</div>
+                <div class="game-title" id="pickTitle">PLAYER 2: PICK A BRIEFCASE</div>
+                <div class="game-subtitle">Choose a briefcase to steal your opponent's deed.</div>
                 <div class="briefcase-container">
-                    <div class="briefcase-card green" onclick="player2PickBriefcase('A')">
+                    <div class="briefcase-card green" onclick="pickBriefcase('A')">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">A</div>
-                        <button class="briefcase-button">Choose A</button>
+                        <button class="briefcase-button" onclick="event.stopPropagation(); pickBriefcase('A')">Choose A</button>
                     </div>
-                    <div class="briefcase-card green" onclick="player2PickBriefcase('B')">
+                    <div class="briefcase-card green" onclick="pickBriefcase('B')">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">B</div>
-                        <button class="briefcase-button">Choose B</button>
+                        <button class="briefcase-button" onclick="event.stopPropagation(); pickBriefcase('B')">Choose B</button>
                     </div>
                 </div>
                 <div class="instruction-text">TAP A BRIEFCASE TO STEAL</div>
             </div>
         </div>
 
-        <!-- SCREEN 5: Reveal -->
+        <!-- REVEAL SCREEN -->
         <div id="revealScreen" class="screen">
             <div class="header-bar">
-                <div class="round-label">ROUND <span id="round4Label">1</span></div>
-                <div class="deed-counter">PLAYER 1: <span id="p1DeedCount4">0</span> Deeds | PLAYER 2: <span id="p2DeedCount4">0</span> Deeds</div>
+                <div class="round-label">ROUND <span id="revealRoundLabel">1</span></div>
+                <div class="deed-counter">P1: <span id="revealP1Score">0</span> | P2: <span id="revealP2Score">0</span></div>
             </div>
             <div class="reveal-screen">
                 <div class="reveal-title" id="revealTitle">REVEAL</div>
                 <div class="reveal-content">
                     <div class="player-side">
-                        <div class="player-label">Player 1</div>
-                        <div id="player1Cards"></div>
+                        <div class="player-label" id="revealHiderLabel">Player 1 (Hider)</div>
+                        <div id="hiderCard"></div>
+                        <div class="player-result" id="hiderResult"></div>
                     </div>
                     <div class="divider"></div>
                     <div class="player-side">
-                        <div class="player-label">Player 2</div>
-                        <div id="player2Cards"></div>
+                        <div class="player-label" id="revealPickerLabel">Player 2 (Picker)</div>
+                        <div id="pickerCard"></div>
+                        <div class="player-result" id="pickerResult"></div>
                     </div>
                 </div>
                 <div class="action-buttons" id="actionButtons"></div>
+            </div>
+        </div>
+
+        <!-- FINAL SCREEN -->
+        <div id="finalScreen" class="screen">
+            <div class="header-bar">
+                <div class="round-label">GAME OVER</div>
+                <div class="deed-counter">P1: <span id="finalP1Score">0</span> | P2: <span id="finalP2Score">0</span></div>
+            </div>
+            <div class="final-screen">
+                <div class="trophy" id="finalEmoji">&#127942;</div>
+                <div class="final-title" id="finalTitle">PLAYER WINS!</div>
+                <div class="final-subtitle" id="finalSubtitle">Claimed the deed to the private island!</div>
+                <div class="final-score" id="finalScoreText"></div>
+                <button class="restart-button" onclick="restartGame()" style="font-size: 20px; padding: 18px 48px;">PLAY AGAIN</button>
             </div>
         </div>
     </div>
 
     <script>
         // Game State
-        const gameState = {
+        const game = {
             round: 1,
-            player1Deeds: 0,
-            player2Deeds: 0,
-            player1HiddenIn: null,
-            player2Choice: null
+            p1Score: 0,
+            p2Score: 0,
+            hider: 1,      // who hides this round
+            picker: 2,      // who picks this round
+            hiddenIn: null,  // which briefcase has the deed
+            picked: null,    // which briefcase was picked
+            confirmTimer: null,
+            locked: false
         };
 
-        function startChallenge() {
-            hideScreen('titleScreen');
-            showScreen('player1HideScreen');
+        // --- Screen Management ---
+
+        let activeScreenId = 'titleScreen';
+
+        function switchScreen(newScreenId) {
+            const old = document.getElementById(activeScreenId);
+            const next = document.getElementById(newScreenId);
+            if (old) old.classList.remove('active');
+            if (next) next.classList.add('active');
+            activeScreenId = newScreenId;
         }
 
-        function player1HideDeed(choice) {
-            gameState.player1HiddenIn = choice;
-            updateAllDeedCounters();
-            document.getElementById('confirmTitle').textContent = `DEED HIDDEN IN BRIEFCASE ${choice}`;
-            hideScreen('player1HideScreen');
-            showScreen('confirmationScreen');
+        // --- Score Updates ---
 
-            // Auto-transition after 3 seconds
-            setTimeout(() => {
-                goToPlayer2Pick();
+        function updateUI() {
+            const screens = ['hide', 'confirm', 'pass', 'pick', 'reveal', 'final'];
+            screens.forEach(prefix => {
+                const p1El = document.getElementById(prefix + 'P1Score');
+                const p2El = document.getElementById(prefix + 'P2Score');
+                const roundEl = document.getElementById(prefix + 'RoundLabel');
+                if (p1El) p1El.textContent = game.p1Score;
+                if (p2El) p2El.textContent = game.p2Score;
+                if (roundEl) roundEl.textContent = game.round;
+            });
+        }
+
+        // --- Game Flow ---
+
+        function startGame() {
+            game.round = 1;
+            game.p1Score = 0;
+            game.p2Score = 0;
+            game.hider = 1;
+            game.picker = 2;
+            game.hiddenIn = null;
+            game.picked = null;
+            game.locked = false;
+            updateUI();
+            setupHideScreen();
+            switchScreen('hideScreen');
+        }
+
+        function setupHideScreen() {
+            document.getElementById('hideTitle').textContent =
+                'PLAYER ' + game.hider + ': HIDE YOUR DEED';
+            updateUI();
+        }
+
+        function hideDeed(choice) {
+            if (game.locked) return;
+            game.locked = true;
+            game.hiddenIn = choice;
+
+            document.getElementById('confirmTitle').textContent =
+                'DEED HIDDEN IN BRIEFCASE ' + choice;
+            updateUI();
+            switchScreen('confirmScreen');
+
+            // Auto-advance after 3s, but cancel if user clicks Continue first
+            game.confirmTimer = setTimeout(function() {
+                goToPassDevice();
             }, 3000);
         }
 
-        function goToPlayer2Pick() {
-            hideScreen('confirmationScreen');
-            showScreen('player2PickScreen');
-        }
-
-        function player2PickBriefcase(choice) {
-            gameState.player2Choice = choice;
-            revealRound();
-        }
-
-        function revealRound() {
-            const player1Has = gameState.player1HiddenIn;
-            const player2Picked = gameState.player2Choice;
-
-            // Player 1 gets what they hid + what player 2 didn't pick
-            const player1GotDeed = (player1Has === player2Picked);
-            // Player 2 gets what they picked
-            const player2GotDeed = (player2Picked !== player1Has);
-
-            if (player2GotDeed) {
-                // Player 2 found the deed - they win the round
-                gameState.player2Deeds++;
-                displayReveal(true, false, false);
-            } else {
-                // No winner this round
-                gameState.player1Deeds++;
-                displayReveal(false, true, true);
+        function goToPassDevice() {
+            if (game.confirmTimer) {
+                clearTimeout(game.confirmTimer);
+                game.confirmTimer = null;
             }
 
-            updateAllDeedCounters();
-            hideScreen('player2PickScreen');
-            showScreen('revealScreen');
+            document.getElementById('passTitle').textContent =
+                'PASS TO PLAYER ' + game.picker;
+            document.getElementById('passText').textContent =
+                'Hand the device to Player ' + game.picker + '. They will now pick a briefcase.';
+            updateUI();
+            switchScreen('passScreen');
         }
 
-        function displayReveal(player2WinsRound, player1HasBoth, player2HasBoth) {
-            const player1CardsDiv = document.getElementById('player1Cards');
-            const player2CardsDiv = document.getElementById('player2Cards');
+        function goToPick() {
+            game.locked = false;
+            document.getElementById('pickTitle').textContent =
+                'PLAYER ' + game.picker + ': PICK A BRIEFCASE';
+            updateUI();
+            switchScreen('pickScreen');
+        }
+
+        function pickBriefcase(choice) {
+            if (game.locked) return;
+            game.locked = true;
+            game.picked = choice;
+            resolveRound();
+        }
+
+        function resolveRound() {
+            const stole = (game.picked === game.hiddenIn);
+
+            // Update scores
+            if (stole) {
+                // Picker found the deed
+                if (game.picker === 1) game.p1Score++;
+                else game.p2Score++;
+            } else {
+                // Hider kept the deed
+                if (game.hider === 1) game.p1Score++;
+                else game.p2Score++;
+            }
+
+            updateUI();
+            displayReveal(stole);
+            switchScreen('revealScreen');
+        }
+
+        function displayReveal(pickerStole) {
+            const hiderCardDiv = document.getElementById('hiderCard');
+            const pickerCardDiv = document.getElementById('pickerCard');
             const revealTitle = document.getElementById('revealTitle');
+            const hiderResult = document.getElementById('hiderResult');
+            const pickerResult = document.getElementById('pickerResult');
             const actionButtons = document.getElementById('actionButtons');
 
-            // Clear previous content
-            player1CardsDiv.innerHTML = '';
-            player2CardsDiv.innerHTML = '';
+            document.getElementById('revealHiderLabel').textContent =
+                'Player ' + game.hider + ' (Hider)';
+            document.getElementById('revealPickerLabel').textContent =
+                'Player ' + game.picker + ' (Picker)';
+
+            hiderCardDiv.innerHTML = '';
+            pickerCardDiv.innerHTML = '';
             actionButtons.innerHTML = '';
 
-            if (player2WinsRound) {
-                // Player 2 wins - they got the deed
-                revealTitle.innerHTML = '🎉 Player 2 Wins! Correctly Read Player 1 Like A Book';
+            if (pickerStole) {
+                revealTitle.textContent = 'Player ' + game.picker + ' Steals The Deed!';
                 revealTitle.style.color = '#00C853';
 
-                // Player 1 has two X's
-                player1CardsDiv.innerHTML = '<div class="card fail">✕</div><div class="card fail">✕</div>';
-                // Player 2 has two deeds
-                player2CardsDiv.innerHTML = '<div class="card deed">📜</div><div class="card deed">📜</div>';
+                hiderCardDiv.innerHTML = '<div class="card fail" style="animation-delay:0.2s">&#10005;</div>';
+                hiderResult.textContent = 'Deed stolen!';
+                hiderResult.style.color = '#ff5252';
 
-                actionButtons.innerHTML = '<button class="restart-button" onclick="restartGame()">RESTART GAME</button>';
+                pickerCardDiv.innerHTML = '<div class="card deed" style="animation-delay:0.5s">&#128220;</div>';
+                pickerResult.textContent = 'Found the deed!';
+                pickerResult.style.color = '#00C853';
             } else {
-                // Game continues - each player has one deed, one X
-                revealTitle.innerHTML = 'No One Wins, Game Continues';
+                revealTitle.textContent = 'Player ' + game.hider + ' Keeps The Deed!';
                 revealTitle.style.color = '#ffd700';
 
-                // Player 1 has one deed, one X
-                player1CardsDiv.innerHTML = '<div class="card deed">📜</div><div class="card fail">✕</div>';
-                // Player 2 has one deed, one X
-                player2CardsDiv.innerHTML = '<div class="card deed">📜</div><div class="card fail">✕</div>';
+                hiderCardDiv.innerHTML = '<div class="card deed" style="animation-delay:0.2s">&#128220;</div>';
+                hiderResult.textContent = 'Deed safe!';
+                hiderResult.style.color = '#00C853';
 
-                actionButtons.innerHTML = '<button class="round-two-button" onclick="startRound2()">GO ROUND TWO</button>';
+                pickerCardDiv.innerHTML = '<div class="card fail" style="animation-delay:0.5s">&#10005;</div>';
+                pickerResult.textContent = 'Picked wrong!';
+                pickerResult.style.color = '#ff5252';
+            }
+
+            // Check if game is over (someone has 2 deeds, or both rounds done)
+            var gameOver = (game.p1Score >= 2 || game.p2Score >= 2);
+            var roundsDone = (game.round >= 2);
+
+            if (gameOver) {
+                actionButtons.innerHTML =
+                    '<button class="restart-button" onclick="showFinalScreen()">SEE RESULTS</button>';
+            } else if (roundsDone) {
+                // After round 2, if tied, go to sudden death
+                if (game.p1Score === game.p2Score) {
+                    actionButtons.innerHTML =
+                        '<button class="next-round-button" onclick="startNextRound()">SUDDEN DEATH</button>';
+                } else {
+                    actionButtons.innerHTML =
+                        '<button class="restart-button" onclick="showFinalScreen()">SEE RESULTS</button>';
+                }
+            } else {
+                actionButtons.innerHTML =
+                    '<button class="next-round-button" onclick="startNextRound()">ROUND 2 &rarr;</button>';
             }
         }
 
-        function startRound2() {
-            gameState.round = 2;
-            gameState.player1HiddenIn = null;
-            gameState.player2Choice = null;
+        function startNextRound() {
+            game.round++;
+            // Swap roles
+            var temp = game.hider;
+            game.hider = game.picker;
+            game.picker = temp;
+            game.hiddenIn = null;
+            game.picked = null;
+            game.locked = false;
 
-            updateAllDeedCounters();
-            hideScreen('revealScreen');
-            showScreen('player1HideScreen');
+            updateUI();
+            setupHideScreen();
+            switchScreen('hideScreen');
+        }
+
+        function showFinalScreen() {
+            var winner = game.p1Score > game.p2Score ? 1 : 2;
+            var finalTitle = document.getElementById('finalTitle');
+            var finalSubtitle = document.getElementById('finalSubtitle');
+            var finalScore = document.getElementById('finalScoreText');
+            var finalEmoji = document.getElementById('finalEmoji');
+
+            finalTitle.textContent = 'PLAYER ' + winner + ' WINS!';
+            finalTitle.style.color = '#00C853';
+            finalSubtitle.textContent = 'Claimed the deed to the private island!';
+            finalScore.textContent = 'Final Score: P1 ' + game.p1Score + ' - ' + game.p2Score + ' P2';
+            finalEmoji.innerHTML = '&#127942;';
+
+            updateUI();
+            switchScreen('finalScreen');
         }
 
         function restartGame() {
-            gameState.round = 1;
-            gameState.player1Deeds = 0;
-            gameState.player2Deeds = 0;
-            gameState.player1HiddenIn = null;
-            gameState.player2Choice = null;
-
-            updateAllDeedCounters();
-            hideScreen('revealScreen');
-            showScreen('titleScreen');
-        }
-
-        function updateAllDeedCounters() {
-            const counters = [
-                'p1DeedCount', 'p2DeedCount',
-                'p1DeedCount2', 'p2DeedCount2',
-                'p1DeedCount3', 'p2DeedCount3',
-                'p1DeedCount4', 'p2DeedCount4'
-            ];
-
-            counters.forEach(id => {
-                const elem = document.getElementById(id);
-                if (elem) elem.textContent = gameState.player1Deeds;
-
-                const p2Id = id.replace('p1', 'temp').replace('temp', 'p2');
-                const elem2 = document.getElementById(p2Id);
-                if (elem2) elem2.textContent = gameState.player2Deeds;
-            });
-
-            const roundLabels = ['round1Label', 'round2Label', 'round3Label', 'round4Label'];
-            roundLabels.forEach(id => {
-                const elem = document.getElementById(id);
-                if (elem) elem.textContent = gameState.round;
-            });
-        }
-
-        function hideScreen(screenId) {
-            const screen = document.getElementById(screenId);
-            if (screen) {
-                screen.classList.remove('active');
-            }
-        }
-
-        function showScreen(screenId) {
-            const screen = document.getElementById(screenId);
-            if (screen) {
-                screen.classList.add('active');
-            }
+            switchScreen('titleScreen');
         }
 
         // Initialize
-        updateAllDeedCounters();
+        updateUI();
     </script>
 </body>
 </html>
