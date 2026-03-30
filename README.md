@@ -38,8 +38,6 @@ This challenge is a zero-sum, simultaneous-move game. The Nash Equilibrium is to
 
 Built for CCT404H5 (New Media and Digital Cultures) at the University of Toronto Mississauga. The presentation thesis examines how Beast Games industrializes participatory labour by structuring individual spontaneity within a designed system that shifts creative agency from participants to production.
 
-Key sources: Chia (2022) on creativity stratification, Hesmondhalgh & Baker (2013) on creative labour, Tan (1998) on total systems management, Horton (2025) on YouTube-TV convergence, Sweney (2025) on the creator economy, and Elberse (2023) HBS case study on MrBeast.
-
 ## Tech Stack
 
 - Vanilla HTML, CSS, JavaScript (zero dependencies, single file)
