@@ -123,6 +123,52 @@
             animation: slideDown 0.8s ease-out 0.5s backwards;
         }
 
+        .name-inputs {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 32px;
+            animation: slideDown 0.8s ease-out 0.6s backwards;
+            flex-wrap: wrap;
+        }
+
+        .name-field {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .name-field label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            color: #00e5ff;
+            letter-spacing: 2px;
+        }
+
+        .name-field input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 229, 255, 0.4);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 20px;
+            color: #fff;
+            text-align: center;
+            width: 220px;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .name-field input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .name-field input:focus {
+            border-color: #00e5ff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         /* ===== HEADER BAR ===== */
         .header-bar {
             background: linear-gradient(90deg, #0d0d0d 0%, #1a1a2e 100%);
@@ -818,6 +864,16 @@
                     Round 2: Roles swap. First to 2 deeds wins the island.
                 </div>
                 <div class="theory-note">Nash Equilibrium: randomize 50/50. No pure strategy exists.</div>
+                <div class="name-inputs">
+                    <div class="name-field">
+                        <label for="p1Name">PLAYER 1</label>
+                        <input type="text" id="p1Name" placeholder="Enter name" maxlength="15" autocomplete="off">
+                    </div>
+                    <div class="name-field">
+                        <label for="p2Name">PLAYER 2</label>
+                        <input type="text" id="p2Name" placeholder="Enter name" maxlength="15" autocomplete="off">
+                    </div>
+                </div>
                 <button class="briefcase-button" onclick="startGame()" aria-label="Start the challenge" style="font-size: 24px; padding: 20px 50px;">START CHALLENGE</button>
             </div>
         </div>
@@ -826,7 +882,7 @@
         <div id="hideScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label">ROUND <span id="hideRoundLabel">1</span></div>
-                <div class="deed-counter">P1: <span id="hideP1Score">0</span> | P2: <span id="hideP2Score">0</span></div>
+                <div class="deed-counter"><span id="hideP1Label">P1</span>: <span id="hideP1Score">0</span> | <span id="hideP2Label">P2</span>: <span id="hideP2Score">0</span></div>
             </div>
             <div class="game-screen">
                 <div class="game-title" id="hideTitle">PLAYER 1: HIDE YOUR DEED</div>
@@ -851,7 +907,7 @@
         <div id="confirmScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label">ROUND <span id="confirmRoundLabel">1</span></div>
-                <div class="deed-counter">P1: <span id="confirmP1Score">0</span> | P2: <span id="confirmP2Score">0</span></div>
+                <div class="deed-counter"><span id="confirmP1Label">P1</span>: <span id="confirmP1Score">0</span> | <span id="confirmP2Label">P2</span>: <span id="confirmP2Score">0</span></div>
             </div>
             <div class="confirmation-screen">
                 <div class="checkmark-circle">&#10003;</div>
@@ -869,7 +925,7 @@
         <div id="passScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label">ROUND <span id="passRoundLabel">1</span></div>
-                <div class="deed-counter">P1: <span id="passP1Score">0</span> | P2: <span id="passP2Score">0</span></div>
+                <div class="deed-counter"><span id="passP1Label">P1</span>: <span id="passP1Score">0</span> | <span id="passP2Label">P2</span>: <span id="passP2Score">0</span></div>
             </div>
             <div class="pass-device-screen">
                 <div class="pass-icon">&#128241;</div>
@@ -883,7 +939,7 @@
         <div id="pickScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label">ROUND <span id="pickRoundLabel">1</span></div>
-                <div class="deed-counter">P1: <span id="pickP1Score">0</span> | P2: <span id="pickP2Score">0</span></div>
+                <div class="deed-counter"><span id="pickP1Label">P1</span>: <span id="pickP1Score">0</span> | <span id="pickP2Label">P2</span>: <span id="pickP2Score">0</span></div>
             </div>
             <div class="game-screen">
                 <div class="game-title" id="pickTitle">PLAYER 2: PICK A BRIEFCASE</div>
@@ -908,7 +964,7 @@
         <div id="revealScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label" id="revealRoundText">ROUND <span id="revealRoundLabel">1</span></div>
-                <div class="deed-counter">P1: <span id="revealP1Score">0</span> | P2: <span id="revealP2Score">0</span></div>
+                <div class="deed-counter"><span id="revealP1Label">P1</span>: <span id="revealP1Score">0</span> | <span id="revealP2Label">P2</span>: <span id="revealP2Score">0</span></div>
             </div>
             <div class="reveal-screen">
                 <div class="reveal-title" id="revealTitle">REVEAL</div>
@@ -933,7 +989,7 @@
         <div id="finalScreen" class="screen">
             <div class="header-bar">
                 <div class="round-label">GAME OVER</div>
-                <div class="deed-counter">P1: <span id="finalP1Score">0</span> | P2: <span id="finalP2Score">0</span></div>
+                <div class="deed-counter"><span id="finalP1Label">P1</span>: <span id="finalP1Score">0</span> | <span id="finalP2Label">P2</span>: <span id="finalP2Score">0</span></div>
             </div>
             <div class="final-screen">
                 <div class="trophy" id="finalEmoji">&#127942;</div>
@@ -951,6 +1007,8 @@
             round: 1,
             p1Score: 0,
             p2Score: 0,
+            p1Name: 'Player 1',
+            p2Name: 'Player 2',
             hider: 1,
             picker: 2,
             hiddenIn: null,
@@ -958,6 +1016,10 @@
             confirmTimer: null,
             locked: false
         };
+
+        function getName(playerNum) {
+            return playerNum === 1 ? game.p1Name : game.p2Name;
+        }
 
         // ========== SCREEN MANAGEMENT ==========
         var activeScreenId = 'titleScreen';
@@ -984,6 +1046,11 @@
                 if (p1El) p1El.textContent = game.p1Score;
                 if (p2El) p2El.textContent = game.p2Score;
                 if (roundEl) roundEl.textContent = game.round > 2 ? 'SD' : game.round;
+
+                var p1Label = document.getElementById(prefix + 'P1Label');
+                var p2Label = document.getElementById(prefix + 'P2Label');
+                if (p1Label) p1Label.textContent = game.p1Name;
+                if (p2Label) p2Label.textContent = game.p2Name;
             }
         }
 
@@ -1002,6 +1069,10 @@
 
         // ========== GAME FLOW ==========
         function startGame() {
+            var n1 = document.getElementById('p1Name').value.trim();
+            var n2 = document.getElementById('p2Name').value.trim();
+            game.p1Name = n1 || 'Player 1';
+            game.p2Name = n2 || 'Player 2';
             game.round = 1;
             game.p1Score = 0;
             game.p2Score = 0;
@@ -1021,7 +1092,7 @@
 
         function setupHideScreen() {
             document.getElementById('hideTitle').textContent =
-                'PLAYER ' + game.hider + ': HIDE YOUR DEED';
+                getName(game.hider).toUpperCase() + ': HIDE YOUR DEED';
         }
 
         function hideDeed(choice) {
@@ -1048,9 +1119,9 @@
             }
 
             document.getElementById('passTitle').textContent =
-                'PASS TO PLAYER ' + game.picker;
+                'PASS TO ' + getName(game.picker).toUpperCase();
             document.getElementById('passText').textContent =
-                'Hand the device to Player ' + game.picker + '. They will now pick a briefcase.';
+                'Hand the device to ' + getName(game.picker) + '. They will now pick a briefcase.';
             updateUI();
             switchScreen('passScreen');
         }
@@ -1058,7 +1129,7 @@
         function goToPick() {
             game.locked = false;
             document.getElementById('pickTitle').textContent =
-                'PLAYER ' + game.picker + ': PICK A BRIEFCASE';
+                getName(game.picker).toUpperCase() + ': PICK A BRIEFCASE';
             updateUI();
             switchScreen('pickScreen');
         }
@@ -1099,9 +1170,9 @@
             var revealRoundText = document.getElementById('revealRoundText');
 
             document.getElementById('revealHiderLabel').textContent =
-                'Player ' + game.hider + ' (Hider)';
+                getName(game.hider) + ' (Hider)';
             document.getElementById('revealPickerLabel').textContent =
-                'Player ' + game.picker + ' (Picker)';
+                getName(game.picker) + ' (Picker)';
 
             if (game.round > 2) {
                 revealRoundText.textContent = 'SUDDEN DEATH';
@@ -1112,7 +1183,7 @@
             actionButtons.innerHTML = '';
 
             if (pickerStole) {
-                revealTitle.textContent = 'Player ' + game.picker + ' Steals The Deed!';
+                revealTitle.textContent = getName(game.picker) + ' Steals The Deed!';
                 revealTitle.style.color = '#00C853';
 
                 hiderCardDiv.innerHTML = '<div class="card fail" style="animation-delay:0.2s">&#10005;</div>';
@@ -1123,7 +1194,7 @@
                 pickerResult.textContent = 'Found the deed!';
                 pickerResult.style.color = '#00C853';
             } else {
-                revealTitle.textContent = 'Player ' + game.hider + ' Keeps The Deed!';
+                revealTitle.textContent = getName(game.hider) + ' Keeps The Deed!';
                 revealTitle.style.color = '#ffd700';
 
                 hiderCardDiv.innerHTML = '<div class="card deed" style="animation-delay:0.2s">&#128220;</div>';
@@ -1186,14 +1257,14 @@
                 finalSubtitle.textContent = 'Both players matched wits perfectly.';
                 finalEmoji.innerHTML = '&#129309;';
             } else {
-                finalTitle.textContent = 'PLAYER ' + winner + ' WINS!';
+                finalTitle.textContent = getName(winner).toUpperCase() + ' WINS!';
                 finalTitle.style.color = '#00C853';
-                finalSubtitle.textContent = 'Claimed the deed to the private island!';
+                finalSubtitle.textContent = getName(winner) + ' claimed the deed to the private island!';
                 finalEmoji.innerHTML = '&#127942;';
                 startConfetti();
             }
 
-            finalScore.textContent = 'P1  ' + game.p1Score + ' - ' + game.p2Score + '  P2';
+            finalScore.textContent = game.p1Name + '  ' + game.p1Score + ' - ' + game.p2Score + '  ' + game.p2Name;
             updateUI();
             switchScreen('finalScreen');
         }
