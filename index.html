@@ -1283,6 +1283,20 @@
                 clearTimeout(game.confirmTimer);
                 game.confirmTimer = null;
             }
+
+            // Restore revealRoundText (sudden death destroys the inner span via textContent)
+            document.getElementById('revealRoundText').innerHTML =
+                'ROUND <span id="revealRoundLabel">1</span>';
+
+            // Clear inline styles set during reveal/final screens
+            document.getElementById('revealTitle').style.color = '';
+            document.getElementById('hiderResult').style.color = '';
+            document.getElementById('pickerResult').style.color = '';
+            document.getElementById('finalTitle').style.color = '';
+
+            // Clear stale action buttons
+            document.getElementById('actionButtons').innerHTML = '';
+
             updateUI();
             switchScreen('titleScreen');
         }
