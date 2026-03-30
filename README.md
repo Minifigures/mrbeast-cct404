@@ -6,13 +6,29 @@ Interactive two-player game inspired by the Beast Games briefcase challenge, bui
 
 ## How It Works
 
-Two players take turns hiding and picking briefcases. Each round, one player hides a deed in one of two briefcases, and the other tries to steal it.
+1. Both players enter their names on the title screen
+2. Each round, one player hides a deed in one of two briefcases, the other tries to steal it
+3. A "pass the device" screen ensures fair play between turns
 
 - **Round 1:** Player 1 hides, Player 2 picks
 - **Round 2:** Roles swap (Player 2 hides, Player 1 picks)
 - **Sudden Death:** If tied after 2 rounds, keep playing until someone leads
 
 First to 2 deeds wins the island.
+
+## Features
+
+- Custom player names displayed throughout the game
+- Bebas Neue font for Beast Games branding
+- Confetti burst on the win screen
+- Score pop animations when points are scored
+- "?" button opens a game theory + rules overlay
+- Nash Equilibrium explanation tying gameplay to academic thesis
+- Pass-device screen to prevent peeking between turns
+- Animated briefcase shuffle on confirmation
+- Mobile-friendly with touch optimization and safe-area insets
+- OG meta tags for rich link previews
+- Accessible with aria-labels on interactive elements
 
 ## Game Theory
 
@@ -22,12 +38,14 @@ This challenge is a zero-sum, simultaneous-move game. The Nash Equilibrium is to
 
 Built for CCT404H5 (New Media and Digital Cultures) at the University of Toronto Mississauga. The presentation thesis examines how Beast Games industrializes participatory labour by structuring individual spontaneity within a designed system that shifts creative agency from participants to production.
 
+Key sources: Chia (2022) on creativity stratification, Hesmondhalgh & Baker (2013) on creative labour, Tan (1998) on total systems management, Horton (2025) on YouTube-TV convergence, Sweney (2025) on the creator economy, and Elberse (2023) HBS case study on MrBeast.
+
 ## Tech Stack
 
-- Vanilla HTML, CSS, JavaScript (no dependencies)
-- Deployed on Vercel as a static site
+- Vanilla HTML, CSS, JavaScript (zero dependencies, single file)
+- Deployed on Vercel as a static site (auto-deploys on push)
 - Bebas Neue font via Google Fonts
-- Companion Figma plugin for prototyping
+- Companion Figma plugin for prototyping (`/Briefcase`)
 
 ## Running Locally
 
