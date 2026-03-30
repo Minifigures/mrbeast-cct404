@@ -56,6 +56,15 @@
             z-index: 100;
         }
 
+        /* Re-trigger entrance animations each time a screen is shown */
+        .screen.active .beast-title { animation: titlePulse 1s ease-out; }
+        .screen.active .subtitle { animation: slideDown 0.8s ease-out 0.2s backwards; }
+        .screen.active .rules-text { animation: slideDown 0.8s ease-out 0.4s backwards; }
+        .screen.active .theory-note { animation: slideDown 0.8s ease-out 0.5s backwards; }
+        .screen.active .name-inputs { animation: slideDown 0.8s ease-out 0.6s backwards; }
+        .screen.active .checkmark-circle { animation: scaleIn 0.6s ease-out; }
+        .screen.active .trophy { animation: scaleIn 0.8s ease-out; }
+
         /* ===== TITLE SCREEN ===== */
         #titleScreen {
             background: linear-gradient(135deg, #0d47a1 0%, #00838f 40%, #00695c 100%);
@@ -80,7 +89,6 @@
             margin-bottom: 20px;
             text-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
             letter-spacing: 12px;
-            animation: titlePulse 1s ease-out;
         }
 
         @keyframes titlePulse {
@@ -96,7 +104,6 @@
             color: #00e5ff;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             letter-spacing: 6px;
-            animation: slideDown 0.8s ease-out 0.2s backwards;
         }
 
         @keyframes slideDown {
@@ -112,7 +119,6 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            animation: slideDown 0.8s ease-out 0.4s backwards;
         }
 
         .theory-note {
@@ -120,7 +126,6 @@
             color: rgba(179, 229, 252, 0.6);
             font-style: italic;
             margin-bottom: 40px;
-            animation: slideDown 0.8s ease-out 0.5s backwards;
         }
 
         .name-inputs {
@@ -128,7 +133,6 @@
             gap: 24px;
             justify-content: center;
             margin-bottom: 32px;
-            animation: slideDown 0.8s ease-out 0.6s backwards;
             flex-wrap: wrap;
         }
 
@@ -425,7 +429,6 @@
             align-items: center;
             margin-bottom: 40px;
             font-size: 100px;
-            animation: scaleIn 0.6s ease-out;
             box-shadow: 0 8px 24px rgba(0, 200, 83, 0.4);
         }
 
@@ -640,7 +643,6 @@
         .trophy {
             font-size: 140px;
             margin-bottom: 30px;
-            animation: scaleIn 0.8s ease-out;
         }
 
         .final-title {
@@ -1227,6 +1229,10 @@
         }
 
         function startNextRound() {
+            if (game.confirmTimer) {
+                clearTimeout(game.confirmTimer);
+                game.confirmTimer = null;
+            }
             game.round++;
             var temp = game.hider;
             game.hider = game.picker;
@@ -1296,6 +1302,25 @@
 
             // Clear stale action buttons
             document.getElementById('actionButtons').innerHTML = '';
+
+            // Clear stale reveal screen content
+            document.getElementById('hiderCard').innerHTML = '';
+            document.getElementById('pickerCard').innerHTML = '';
+            document.getElementById('hiderResult').textContent = '';
+            document.getElementById('pickerResult').textContent = '';
+            document.getElementById('revealTitle').textContent = '';
+
+            // Clear stale final screen content
+            document.getElementById('finalScoreText').textContent = '';
+
+            // Remove score-pop classes so animations replay cleanly
+            var allScreens = ['hide', 'confirm', 'pass', 'pick', 'reveal', 'final'];
+            for (var i = 0; i < allScreens.length; i++) {
+                var p1El = document.getElementById(allScreens[i] + 'P1Score');
+                var p2El = document.getElementById(allScreens[i] + 'P2Score');
+                if (p1El) p1El.classList.remove('score-pop');
+                if (p2El) p2El.classList.remove('score-pop');
+            }
 
             updateUI();
             switchScreen('titleScreen');
