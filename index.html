@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beast Games - Briefcase Challenge</title>
+    <meta name="description" content="Interactive two-player Briefcase Challenge game inspired by Beast Games. A game theory demonstration for CCT404.">
+    <meta property="og:title" content="Beast Games - Briefcase Challenge">
+    <meta property="og:description" content="Two players. Two briefcases. One deed to a private island. Can you outsmart your opponent?">
+    <meta property="og:url" content="https://beast-briefcase.vercel.app">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F4BC;</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -53,18 +63,23 @@
             align-items: center;
             text-align: center;
             padding: 40px;
+            position: relative;
+            overflow: hidden;
         }
 
         .title-content {
             max-width: 900px;
+            position: relative;
+            z-index: 1;
         }
 
         .beast-title {
-            font-size: 120px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 140px;
             font-weight: 900;
             margin-bottom: 20px;
             text-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            letter-spacing: 8px;
+            letter-spacing: 12px;
             animation: titlePulse 1s ease-out;
         }
 
@@ -74,11 +89,13 @@
         }
 
         .subtitle {
-            font-size: 48px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
             font-weight: 700;
             margin-bottom: 40px;
             color: #00e5ff;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 6px;
             animation: slideDown 0.8s ease-out 0.2s backwards;
         }
 
@@ -90,7 +107,7 @@
         .rules-text {
             font-size: 24px;
             line-height: 1.6;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
             color: #b3e5fc;
             max-width: 800px;
             margin-left: auto;
@@ -98,10 +115,19 @@
             animation: slideDown 0.8s ease-out 0.4s backwards;
         }
 
+        .theory-note {
+            font-size: 16px;
+            color: rgba(179, 229, 252, 0.6);
+            font-style: italic;
+            margin-bottom: 40px;
+            animation: slideDown 0.8s ease-out 0.5s backwards;
+        }
+
         /* ===== HEADER BAR ===== */
         .header-bar {
             background: linear-gradient(90deg, #0d0d0d 0%, #1a1a2e 100%);
             padding: 20px 40px;
+            padding-top: calc(20px + env(safe-area-inset-top, 0px));
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -111,6 +137,7 @@
         }
 
         .round-label {
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 28px;
             font-weight: 900;
             color: #00C853;
@@ -125,6 +152,16 @@
             letter-spacing: 1px;
         }
 
+        .score-pop {
+            animation: scorePop 0.5s ease-out;
+        }
+
+        @keyframes scorePop {
+            0% { transform: scale(1); color: #00e5ff; }
+            50% { transform: scale(1.6); color: #ffd700; }
+            100% { transform: scale(1); color: #00e5ff; }
+        }
+
         /* ===== GAME SCREEN SHARED ===== */
         .game-screen {
             background: #1a1a2e;
@@ -132,17 +169,20 @@
             display: flex;
             flex-direction: column;
             padding: 40px;
+            padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
             justify-content: center;
             align-items: center;
         }
 
         .game-title {
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 56px;
             font-weight: 900;
             margin-bottom: 20px;
             color: #fff;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             text-align: center;
+            letter-spacing: 3px;
         }
 
         .game-subtitle {
@@ -169,6 +209,7 @@
             display: flex;
             flex-direction: column;
             padding: 40px;
+            padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -186,10 +227,12 @@
         }
 
         .pass-title {
-            font-size: 48px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
             font-weight: 900;
             margin-bottom: 20px;
             color: #ffd700;
+            letter-spacing: 3px;
         }
 
         .pass-text {
@@ -224,6 +267,8 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .briefcase-card:hover {
@@ -247,6 +292,11 @@
             100% { transform: rotate(0deg) translateX(100%); }
         }
 
+        .briefcase-card.clicked {
+            transform: scale(0.94);
+            transition: transform 0.1s ease;
+        }
+
         .briefcase-handle {
             position: absolute;
             top: -10px;
@@ -261,7 +311,8 @@
         }
 
         .briefcase-label {
-            font-size: 32px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
             font-weight: 900;
             color: #d4a574;
             margin-top: 20px;
@@ -285,6 +336,7 @@
             box-shadow: 0 6px 16px rgba(0, 200, 83, 0.3);
             position: relative;
             z-index: 1;
+            touch-action: manipulation;
         }
 
         .briefcase-button:hover {
@@ -337,10 +389,12 @@
         }
 
         .confirmation-title {
-            font-size: 48px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
             font-weight: 900;
             margin-bottom: 20px;
             color: #00C853;
+            letter-spacing: 3px;
         }
 
         .confirmation-text {
@@ -353,12 +407,24 @@
         .shuffle-animation {
             font-size: 60px;
             margin: 30px 0;
-            animation: shuffle 1.5s ease-in-out infinite;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
         }
 
-        @keyframes shuffle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .shuffle-a, .shuffle-b {
+            display: inline-block;
+            animation: shuffleSwap 1.2s ease-in-out infinite alternate;
+        }
+
+        .shuffle-b {
+            animation-direction: alternate-reverse;
+        }
+
+        @keyframes shuffleSwap {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(40px); opacity: 0.5; }
+            100% { transform: translateX(0); }
         }
 
         .continue-button {
@@ -375,6 +441,7 @@
             letter-spacing: 2px;
             box-shadow: 0 8px 20px rgba(0, 200, 83, 0.4);
             margin-top: 40px;
+            touch-action: manipulation;
         }
 
         .continue-button:hover {
@@ -393,11 +460,13 @@
         }
 
         .reveal-title {
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 52px;
             font-weight: 900;
             text-align: center;
             margin-bottom: 50px;
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: 3px;
         }
 
         .reveal-content {
@@ -417,11 +486,12 @@
         }
 
         .player-label {
-            font-size: 24px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 26px;
             font-weight: 700;
             color: #00e5ff;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
         .player-result {
@@ -486,6 +556,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
         }
 
         .restart-button {
@@ -527,10 +598,12 @@
         }
 
         .final-title {
-            font-size: 60px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 64px;
             font-weight: 900;
             margin-bottom: 20px;
             text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            letter-spacing: 4px;
         }
 
         .final-subtitle {
@@ -540,16 +613,142 @@
         }
 
         .final-score {
-            font-size: 36px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 40px;
             font-weight: 700;
             margin-bottom: 40px;
             color: #ffd700;
+            letter-spacing: 3px;
         }
+
+        /* ===== CONFETTI CANVAS ===== */
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        /* ===== HOW TO PLAY OVERLAY ===== */
+        #howToPlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 13, 46, 0.94);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 999;
+            overflow-y: auto;
+            padding: 40px 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #howToPlay.open {
+            display: flex;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .htp-content {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .htp-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .htp-close:hover { opacity: 1; }
+
+        .htp-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            color: #00e5ff;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+
+        .htp-rule {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid #00C853;
+        }
+
+        .htp-rule strong {
+            color: #00C853;
+            font-size: 18px;
+        }
+
+        .htp-rule p {
+            color: #b3e5fc;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .htp-theory {
+            background: rgba(0, 200, 83, 0.08);
+            border: 1px solid rgba(0, 200, 83, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .htp-theory h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .htp-theory p {
+            color: #b3e5fc;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .help-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 200, 83, 0.9);
+            color: #fff;
+            font-size: 28px;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            z-index: 150;
+            box-shadow: 0 4px 16px rgba(0, 200, 83, 0.4);
+            transition: transform 0.2s;
+            touch-action: manipulation;
+        }
+
+        .help-btn:hover { transform: scale(1.1); }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1200px) {
-            .beast-title { font-size: 80px; }
-            .subtitle { font-size: 36px; }
+            .beast-title { font-size: 100px; }
+            .subtitle { font-size: 40px; }
             .rules-text { font-size: 20px; }
             .game-title { font-size: 44px; }
             .briefcase-container { gap: 40px; }
@@ -559,7 +758,7 @@
             .container { height: auto; min-height: 100vh; }
             .screen { height: auto; min-height: 100vh; }
             .beast-title { font-size: 56px; letter-spacing: 4px; }
-            .subtitle { font-size: 28px; }
+            .subtitle { font-size: 28px; letter-spacing: 3px; }
             .game-title { font-size: 32px; }
             .game-subtitle { font-size: 18px; margin-bottom: 30px; }
             .briefcase-container { gap: 20px; }
@@ -573,10 +772,40 @@
             .header-bar { padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
             .round-label { font-size: 20px; }
             .deed-counter { font-size: 16px; }
+            .htp-title { font-size: 36px; }
         }
     </style>
 </head>
 <body>
+    <canvas id="confettiCanvas"></canvas>
+
+    <button class="help-btn" onclick="openHowToPlay()" aria-label="How to play">?</button>
+
+    <!-- HOW TO PLAY OVERLAY -->
+    <div id="howToPlay">
+        <button class="htp-close" onclick="closeHowToPlay()" aria-label="Close">&times;</button>
+        <div class="htp-content">
+            <div class="htp-title">RULES + GAME THEORY</div>
+            <div class="htp-rule">
+                <strong>1. Hide</strong>
+                <p>The hider places their deed in Briefcase A or B. An X goes in the other.</p>
+            </div>
+            <div class="htp-rule">
+                <strong>2. Pick</strong>
+                <p>The picker chooses a briefcase to steal. If they find the deed, they take it.</p>
+            </div>
+            <div class="htp-rule">
+                <strong>3. Swap</strong>
+                <p>Roles swap each round. Round 1: P1 hides, P2 picks. Round 2: P2 hides, P1 picks. First to 2 deeds wins. Tied? Sudden death.</p>
+            </div>
+            <div class="htp-theory">
+                <h3>Game Theory</h3>
+                <p>This is a zero-sum, simultaneous-move game. The Nash Equilibrium is to randomize 50/50, meaning no pure strategy exists. The hider gains nothing by always choosing A, and the picker gains nothing by always choosing B. Both players' optimal play is a coin flip.</p>
+                <p style="margin-top: 12px;">This is exactly what Beast Games exploits: the challenge looks like a skill game, but is fundamentally a coin flip dressed in spectacle. The production designs the system to create dramatic tension from what is, strategically, pure chance.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- TITLE SCREEN -->
         <div id="titleScreen" class="screen active">
@@ -588,7 +817,8 @@
                     Round 1: Player 1 hides, Player 2 picks.<br>
                     Round 2: Roles swap. First to 2 deeds wins the island.
                 </div>
-                <button class="briefcase-button" onclick="startGame()" style="font-size: 24px; padding: 20px 50px;">START CHALLENGE</button>
+                <div class="theory-note">Nash Equilibrium: randomize 50/50. No pure strategy exists.</div>
+                <button class="briefcase-button" onclick="startGame()" aria-label="Start the challenge" style="font-size: 24px; padding: 20px 50px;">START CHALLENGE</button>
             </div>
         </div>
 
@@ -602,12 +832,12 @@
                 <div class="game-title" id="hideTitle">PLAYER 1: HIDE YOUR DEED</div>
                 <div class="game-subtitle">Place your signed deed in one briefcase and an X in the other. Your opponent cannot see your choice.</div>
                 <div class="briefcase-container">
-                    <div class="briefcase-card" onclick="hideDeed('A')">
+                    <div class="briefcase-card" onclick="hideDeed('A')" aria-label="Hide deed in briefcase A">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">A</div>
                         <button class="briefcase-button" onclick="event.stopPropagation(); hideDeed('A')">Choose A</button>
                     </div>
-                    <div class="briefcase-card" onclick="hideDeed('B')">
+                    <div class="briefcase-card" onclick="hideDeed('B')" aria-label="Hide deed in briefcase B">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">B</div>
                         <button class="briefcase-button" onclick="event.stopPropagation(); hideDeed('B')">Choose B</button>
@@ -627,7 +857,10 @@
                 <div class="checkmark-circle">&#10003;</div>
                 <div class="confirmation-title" id="confirmTitle">DEED HIDDEN</div>
                 <div class="confirmation-text">An X has been placed in the other briefcase. Both briefcases are now closed and shuffled.</div>
-                <div class="shuffle-animation">A &#8644; B</div>
+                <div class="shuffle-animation">
+                    <span class="shuffle-a">&#128188;</span>
+                    <span class="shuffle-b">&#128188;</span>
+                </div>
                 <button class="continue-button" onclick="goToPassDevice()">CONTINUE</button>
             </div>
         </div>
@@ -656,12 +889,12 @@
                 <div class="game-title" id="pickTitle">PLAYER 2: PICK A BRIEFCASE</div>
                 <div class="game-subtitle">Choose a briefcase to steal your opponent's deed.</div>
                 <div class="briefcase-container">
-                    <div class="briefcase-card green" onclick="pickBriefcase('A')">
+                    <div class="briefcase-card green" onclick="pickBriefcase('A')" aria-label="Pick briefcase A">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">A</div>
                         <button class="briefcase-button" onclick="event.stopPropagation(); pickBriefcase('A')">Choose A</button>
                     </div>
-                    <div class="briefcase-card green" onclick="pickBriefcase('B')">
+                    <div class="briefcase-card green" onclick="pickBriefcase('B')" aria-label="Pick briefcase B">
                         <div class="briefcase-handle"></div>
                         <div class="briefcase-label">B</div>
                         <button class="briefcase-button" onclick="event.stopPropagation(); pickBriefcase('B')">Choose B</button>
@@ -674,7 +907,7 @@
         <!-- REVEAL SCREEN -->
         <div id="revealScreen" class="screen">
             <div class="header-bar">
-                <div class="round-label">ROUND <span id="revealRoundLabel">1</span></div>
+                <div class="round-label" id="revealRoundText">ROUND <span id="revealRoundLabel">1</span></div>
                 <div class="deed-counter">P1: <span id="revealP1Score">0</span> | P2: <span id="revealP2Score">0</span></div>
             </div>
             <div class="reveal-screen">
@@ -713,47 +946,61 @@
     </div>
 
     <script>
-        // Game State
-        const game = {
+        // ========== GAME STATE ==========
+        var game = {
             round: 1,
             p1Score: 0,
             p2Score: 0,
-            hider: 1,      // who hides this round
-            picker: 2,      // who picks this round
-            hiddenIn: null,  // which briefcase has the deed
-            picked: null,    // which briefcase was picked
+            hider: 1,
+            picker: 2,
+            hiddenIn: null,
+            picked: null,
             confirmTimer: null,
             locked: false
         };
 
-        // --- Screen Management ---
-
-        let activeScreenId = 'titleScreen';
+        // ========== SCREEN MANAGEMENT ==========
+        var activeScreenId = 'titleScreen';
 
         function switchScreen(newScreenId) {
-            const old = document.getElementById(activeScreenId);
-            const next = document.getElementById(newScreenId);
+            var howTo = document.getElementById('howToPlay');
+            if (howTo) howTo.classList.remove('open');
+
+            var old = document.getElementById(activeScreenId);
+            var next = document.getElementById(newScreenId);
             if (old) old.classList.remove('active');
             if (next) next.classList.add('active');
             activeScreenId = newScreenId;
         }
 
-        // --- Score Updates ---
-
+        // ========== SCORE UPDATES ==========
         function updateUI() {
-            const screens = ['hide', 'confirm', 'pass', 'pick', 'reveal', 'final'];
-            screens.forEach(prefix => {
-                const p1El = document.getElementById(prefix + 'P1Score');
-                const p2El = document.getElementById(prefix + 'P2Score');
-                const roundEl = document.getElementById(prefix + 'RoundLabel');
+            var screens = ['hide', 'confirm', 'pass', 'pick', 'reveal', 'final'];
+            for (var i = 0; i < screens.length; i++) {
+                var prefix = screens[i];
+                var p1El = document.getElementById(prefix + 'P1Score');
+                var p2El = document.getElementById(prefix + 'P2Score');
+                var roundEl = document.getElementById(prefix + 'RoundLabel');
                 if (p1El) p1El.textContent = game.p1Score;
                 if (p2El) p2El.textContent = game.p2Score;
-                if (roundEl) roundEl.textContent = game.round;
-            });
+                if (roundEl) roundEl.textContent = game.round > 2 ? 'SD' : game.round;
+            }
         }
 
-        // --- Game Flow ---
+        function popScore(playerNum) {
+            var screens = ['hide', 'confirm', 'pass', 'pick', 'reveal', 'final'];
+            var key = playerNum === 1 ? 'P1Score' : 'P2Score';
+            for (var i = 0; i < screens.length; i++) {
+                var el = document.getElementById(screens[i] + key);
+                if (el) {
+                    el.classList.remove('score-pop');
+                    void el.offsetWidth; // force reflow
+                    el.classList.add('score-pop');
+                }
+            }
+        }
 
+        // ========== GAME FLOW ==========
         function startGame() {
             game.round = 1;
             game.p1Score = 0;
@@ -763,6 +1010,10 @@
             game.hiddenIn = null;
             game.picked = null;
             game.locked = false;
+            if (game.confirmTimer) {
+                clearTimeout(game.confirmTimer);
+                game.confirmTimer = null;
+            }
             updateUI();
             setupHideScreen();
             switchScreen('hideScreen');
@@ -771,7 +1022,6 @@
         function setupHideScreen() {
             document.getElementById('hideTitle').textContent =
                 'PLAYER ' + game.hider + ': HIDE YOUR DEED';
-            updateUI();
         }
 
         function hideDeed(choice) {
@@ -779,18 +1029,19 @@
             game.locked = true;
             game.hiddenIn = choice;
 
-            document.getElementById('confirmTitle').textContent =
-                'DEED HIDDEN IN BRIEFCASE ' + choice;
+            // Don't reveal which briefcase to prevent peeking
+            document.getElementById('confirmTitle').textContent = 'DEED HIDDEN';
             updateUI();
             switchScreen('confirmScreen');
 
-            // Auto-advance after 3s, but cancel if user clicks Continue first
             game.confirmTimer = setTimeout(function() {
                 goToPassDevice();
             }, 3000);
         }
 
         function goToPassDevice() {
+            if (activeScreenId === 'passScreen') return;
+
             if (game.confirmTimer) {
                 clearTimeout(game.confirmTimer);
                 game.confirmTimer = null;
@@ -820,36 +1071,41 @@
         }
 
         function resolveRound() {
-            const stole = (game.picked === game.hiddenIn);
+            var stole = (game.picked === game.hiddenIn);
+            var scoringPlayer;
 
-            // Update scores
             if (stole) {
-                // Picker found the deed
-                if (game.picker === 1) game.p1Score++;
-                else game.p2Score++;
+                scoringPlayer = game.picker;
             } else {
-                // Hider kept the deed
-                if (game.hider === 1) game.p1Score++;
-                else game.p2Score++;
+                scoringPlayer = game.hider;
             }
 
+            if (scoringPlayer === 1) game.p1Score++;
+            else game.p2Score++;
+
             updateUI();
+            popScore(scoringPlayer);
             displayReveal(stole);
             switchScreen('revealScreen');
         }
 
         function displayReveal(pickerStole) {
-            const hiderCardDiv = document.getElementById('hiderCard');
-            const pickerCardDiv = document.getElementById('pickerCard');
-            const revealTitle = document.getElementById('revealTitle');
-            const hiderResult = document.getElementById('hiderResult');
-            const pickerResult = document.getElementById('pickerResult');
-            const actionButtons = document.getElementById('actionButtons');
+            var hiderCardDiv = document.getElementById('hiderCard');
+            var pickerCardDiv = document.getElementById('pickerCard');
+            var revealTitle = document.getElementById('revealTitle');
+            var hiderResult = document.getElementById('hiderResult');
+            var pickerResult = document.getElementById('pickerResult');
+            var actionButtons = document.getElementById('actionButtons');
+            var revealRoundText = document.getElementById('revealRoundText');
 
             document.getElementById('revealHiderLabel').textContent =
                 'Player ' + game.hider + ' (Hider)';
             document.getElementById('revealPickerLabel').textContent =
                 'Player ' + game.picker + ' (Picker)';
+
+            if (game.round > 2) {
+                revealRoundText.textContent = 'SUDDEN DEATH';
+            }
 
             hiderCardDiv.innerHTML = '';
             pickerCardDiv.innerHTML = '';
@@ -879,7 +1135,6 @@
                 pickerResult.style.color = '#ff5252';
             }
 
-            // Check if game is over (someone has 2 deeds, or both rounds done)
             var gameOver = (game.p1Score >= 2 || game.p2Score >= 2);
             var roundsDone = (game.round >= 2);
 
@@ -887,7 +1142,6 @@
                 actionButtons.innerHTML =
                     '<button class="restart-button" onclick="showFinalScreen()">SEE RESULTS</button>';
             } else if (roundsDone) {
-                // After round 2, if tied, go to sudden death
                 if (game.p1Score === game.p2Score) {
                     actionButtons.innerHTML =
                         '<button class="next-round-button" onclick="startNextRound()">SUDDEN DEATH</button>';
@@ -903,7 +1157,6 @@
 
         function startNextRound() {
             game.round++;
-            // Swap roles
             var temp = game.hider;
             game.hider = game.picker;
             game.picker = temp;
@@ -917,27 +1170,131 @@
         }
 
         function showFinalScreen() {
-            var winner = game.p1Score > game.p2Score ? 1 : 2;
+            var winner;
+            if (game.p1Score > game.p2Score) winner = 1;
+            else if (game.p2Score > game.p1Score) winner = 2;
+            else winner = 0;
+
             var finalTitle = document.getElementById('finalTitle');
             var finalSubtitle = document.getElementById('finalSubtitle');
             var finalScore = document.getElementById('finalScoreText');
             var finalEmoji = document.getElementById('finalEmoji');
 
-            finalTitle.textContent = 'PLAYER ' + winner + ' WINS!';
-            finalTitle.style.color = '#00C853';
-            finalSubtitle.textContent = 'Claimed the deed to the private island!';
-            finalScore.textContent = 'Final Score: P1 ' + game.p1Score + ' - ' + game.p2Score + ' P2';
-            finalEmoji.innerHTML = '&#127942;';
+            if (winner === 0) {
+                finalTitle.textContent = 'IT\'S A DRAW!';
+                finalTitle.style.color = '#ffd700';
+                finalSubtitle.textContent = 'Both players matched wits perfectly.';
+                finalEmoji.innerHTML = '&#129309;';
+            } else {
+                finalTitle.textContent = 'PLAYER ' + winner + ' WINS!';
+                finalTitle.style.color = '#00C853';
+                finalSubtitle.textContent = 'Claimed the deed to the private island!';
+                finalEmoji.innerHTML = '&#127942;';
+                startConfetti();
+            }
 
+            finalScore.textContent = 'P1  ' + game.p1Score + ' - ' + game.p2Score + '  P2';
             updateUI();
             switchScreen('finalScreen');
         }
 
         function restartGame() {
+            stopConfetti();
+            game.round = 1;
+            game.p1Score = 0;
+            game.p2Score = 0;
+            game.hider = 1;
+            game.picker = 2;
+            game.hiddenIn = null;
+            game.picked = null;
+            game.locked = false;
+            if (game.confirmTimer) {
+                clearTimeout(game.confirmTimer);
+                game.confirmTimer = null;
+            }
+            updateUI();
             switchScreen('titleScreen');
         }
 
-        // Initialize
+        // ========== HOW TO PLAY ==========
+        function openHowToPlay() {
+            document.getElementById('howToPlay').classList.add('open');
+        }
+
+        function closeHowToPlay() {
+            document.getElementById('howToPlay').classList.remove('open');
+        }
+
+        // ========== CONFETTI ==========
+        var confettiParticles = [];
+        var confettiAnimId = null;
+        var confettiCanvas = document.getElementById('confettiCanvas');
+        var confettiCtx = confettiCanvas.getContext('2d');
+
+        function resizeConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfetti);
+        resizeConfetti();
+
+        function startConfetti() {
+            stopConfetti();
+            confettiParticles = [];
+            var colors = ['#ffd700', '#00C853', '#00e5ff', '#ff5252', '#ffffff'];
+            var count = navigator.hardwareConcurrency > 2 ? 120 : 60;
+
+            for (var i = 0; i < count; i++) {
+                confettiParticles.push({
+                    x: Math.random() * confettiCanvas.width,
+                    y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: Math.random() * 3 + 2,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 8
+                });
+            }
+
+            function animate() {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                var alive = false;
+                for (var i = 0; i < confettiParticles.length; i++) {
+                    var p = confettiParticles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.08;
+                    p.rotation += p.rotSpeed;
+
+                    if (p.y < confettiCanvas.height + 20) alive = true;
+
+                    confettiCtx.save();
+                    confettiCtx.translate(p.x, p.y);
+                    confettiCtx.rotate(p.rotation * Math.PI / 180);
+                    confettiCtx.fillStyle = p.color;
+                    confettiCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+                    confettiCtx.restore();
+                }
+                if (alive) {
+                    confettiAnimId = requestAnimationFrame(animate);
+                } else {
+                    stopConfetti();
+                }
+            }
+            confettiAnimId = requestAnimationFrame(animate);
+        }
+
+        function stopConfetti() {
+            if (confettiAnimId) {
+                cancelAnimationFrame(confettiAnimId);
+                confettiAnimId = null;
+            }
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles = [];
+        }
+
+        // ========== INIT ==========
         updateUI();
     </script>
 </body>
